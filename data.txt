@@ -1,0 +1,7 @@
+
+
+ReceivedPackets = 5594
+Total Dropped Packets = 2749
+Average End-to-End Delay = 18.3458 ms
+
+
