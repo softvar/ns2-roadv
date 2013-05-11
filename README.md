@@ -43,7 +43,10 @@ Algorithm
 ---------
 
 Step 1: Calculate drop_factor
+
 drop_factor = (1/(Hop_count_of_RREQ_packet + 1))
+
 Step 2: Calculate a random value in the range of 0 to 1.
+
 Step 3: If (random_value > drop_factor) then broadcast/forward RREQ_packet
 else drop RREQ_packet
