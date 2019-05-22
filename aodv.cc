@@ -660,29 +660,33 @@ AODV::recvRequest(Packet *p) {
 struct hdr_ip *ih = HDR_IP(p);
 struct hdr_aodv_request *rq = HDR_AODV_REQUEST(p);
 aodv_rt_entry *rt;
-float drop_factor;
+
  
   /*
    * Drop if:
    *      - I'm the source
    *      - I recently heard this request.
    */
-  float random_value;
-  float num;
-  srand(time(NULL));
-  num=(float)rand();
-  random_value = (num/RAND_MAX)/20.0;
-  printf("%f",random_value);
-  printf(":%d:",rt->rt_hops);
-  drop_factor = (1/(rt->rt_hops+ 1.0))*1000;
-  printf("Drop Factor:%f \n", drop_factor);
-  if(random_value < drop_factor) {
-#ifdef DEBUG
-    fprintf(stderr, "%s: RAODV protocol REQUEST\n", __FUNCTION__);
-#endif // DEBUG
-    Packet::free(p);
-    return;
-  }
+	if(rt)
+	{
+	  float drop_factor;
+	  float random_value;
+	  float num;
+	  srand(time(NULL));
+	  num=(float)rand();
+	  random_value = (num/RAND_MAX)/20.0;
+	  printf("%f",random_value);
+	  printf(":%d:",rt->rt_hops);
+	  drop_factor = (1/(rt->rt_hops+ 1.0))*1000;
+	  printf("Drop Factor:%f \n", drop_factor);
+		  if(random_value < drop_factor) {
+		#ifdef DEBUG
+		    fprintf(stderr, "%s: RAODV protocol REQUEST\n", __FUNCTION__);
+		#endif // DEBUG
+		    Packet::free(p);
+		    return;
+		}
+  	}
 
   if(rq->rq_src == index) {
 #ifdef DEBUG
