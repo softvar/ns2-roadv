@@ -667,26 +667,25 @@ aodv_rt_entry *rt;
    *      - I'm the source
    *      - I recently heard this request.
    */
-	if(rt)
-	{
-	  float drop_factor;
-	  float random_value;
-	  float num;
-	  srand(time(NULL));
-	  num=(float)rand();
-	  random_value = (num/RAND_MAX)/20.0;
-	  printf("%f",random_value);
-	  printf(":%d:",rt->rt_hops);
-	  drop_factor = (1/(rt->rt_hops+ 1.0))*1000;
-	  printf("Drop Factor:%f \n", drop_factor);
-		  if(random_value < drop_factor) {
-		#ifdef DEBUG
-		    fprintf(stderr, "%s: RAODV protocol REQUEST\n", __FUNCTION__);
-		#endif // DEBUG
-		    Packet::free(p);
-		    return;
-		}
-  	}
+	
+float drop_factor;
+float random_value;
+float num;
+// srand(time(NULL)); // this will lead to generation of the same random number every time, therefore commenting it out
+num=(float)rand();
+random_value = (num/RAND_MAX); // num/RAND_MAX will generate number between 0 and 1, so no need to divide by 20
+printf("%f",random_value);
+// printf(":%d:",rt->rt_hops); // rt is not defined, therefore commenting it out
+drop_factor = (1/(rq->rq_hop_count+ 1.0)); // rq->rq_hop_count represents the hop count of the RREQ packet. Also, it will come in range 0 to 1, so multiplication by 1000 was wrong
+printf("Drop Factor:%f \n", drop_factor);
+if(random_value < drop_factor) {
+#ifdef DEBUG
+    fprintf(stderr, "%s: RAODV protocol REQUEST\n", __FUNCTION__);
+#endif // DEBUG
+    Packet::free(p);
+    return;
+}
+
 
   if(rq->rq_src == index) {
 #ifdef DEBUG
